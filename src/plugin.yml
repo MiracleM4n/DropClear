@@ -1,0 +1,19 @@
+name: DropClear
+main: net.D3GN.MiracleM4n.DropClear.DropClear
+version: 1.6.1
+website: 
+author: MiracleM4n
+description: Provides Clearing drops in a radius.
+commands:
+    dropclear:
+        description: Get all nearby wolves.
+        usage: |
+            /<command> [radius]
+            Example: /<command> - See this info.
+            Example: /<command> 30 - Clear drops in a radius of 30.
+    dc:
+        description: Get all nearby wolves.
+        usage: |
+            /<command> [radius]
+            Example: /<command> - See this info.
+            Example: /<command> 30 - Clear drops in a radius of 30.
