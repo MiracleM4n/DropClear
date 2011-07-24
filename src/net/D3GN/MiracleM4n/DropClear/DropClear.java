@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +18,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 public class DropClear extends JavaPlugin {
 
 	protected final static Logger logger = Logger.getLogger("Minecraft");
+	public ColouredConsoleSender console = null;
 	DCCommandExecutor commandexecutor = new DCCommandExecutor(this);
 	
 	
@@ -35,20 +38,24 @@ public class DropClear extends JavaPlugin {
 	//Booleans
 	public Boolean messageFix = true;
 	public Boolean messFix = true;
+	public Boolean hasChanged = false;
+  	public Boolean bukkitPermission = false;
 	
-	public static PermissionHandler Permissions;
+	public static PermissionHandler permissions;
 	
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = getDescription();
+		console = new ColouredConsoleSender((CraftServer)getServer());
 		getCommand("dropclear").setExecutor(commandexecutor);
 		getCommand("dc").setExecutor(commandexecutor);
 	        
 		setupPermissions();
 		
-		System.out.println("[" + (pdfFile.getName()) + "]" + " version " + 
+		console.sendMessage("[" + (pdfFile.getName()) + "]" + " version " + 
 			pdfFile.getVersion() + " is enabled!");
 		
 		moveFiles();
+		checkConfig();
 		readConfig();
 	}
 	
@@ -62,36 +69,80 @@ public class DropClear extends JavaPlugin {
 	private void extractFile(String name) {
 		PluginDescriptionFile pdfFile = getDescription();
 		File actual = new File(getDataFolder(), name);
-			if (!actual.exists()) {
-				InputStream input = getClass().getResourceAsStream("/Config/" + name);
-				if (input != null) {
-					FileOutputStream output = null;
-					try
-					{
-						output = new FileOutputStream(actual);
-						byte[] buf = new byte[8192];
-						int length = 0;
+		if (!actual.exists()) {
+			InputStream input = getClass().getResourceAsStream("/Config/" + name);
+			if (input != null) {
+				FileOutputStream output = null;
+				try
+				{
+					output = new FileOutputStream(actual);
+					byte[] buf = new byte[8192];
+					int length = 0;
 
-						while ((length = input.read(buf)) > 0) {
-							output.write(buf, 0, length);
-						}
-						System.out.println("[" + (pdfFile.getName()) + "]" + "Default file written: " + name);
+					while ((length = input.read(buf)) > 0) {
+						output.write(buf, 0, length);
+					}
+					console.sendMessage("[" + (pdfFile.getName()) + "]" + " Default file written: " + name);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						if (input != null)
+							input.close();
 					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-						try {
-							if (input != null)
-								input.close();
-						} catch (Exception e) {
-						} try {
-							if (output != null)
-								output.close();
-						} catch (Exception e) {
-						}
+					} try {
+						if (output != null)
+							output.close();
+					} catch (Exception e) {
 					}
 				}
 			}
 		}
+	}
+	
+	public void checkConfig() {
+		PluginDescriptionFile pdfFile = getDescription();
+		Configuration config = new Configuration(new File(getDataFolder(), "config.yml"));
+		config.load();
+		
+		if (config.getProperty("NotNumb") == null) {
+			config.setProperty("NotNumb", notNumber);
+			hasChanged = true;
+		}
+		if (config.getProperty("NegValue") == null) {
+			config.setProperty("NegValue", negativeInterger);
+			hasChanged = true;
+		}
+		if (config.getProperty("TooFar") == null) {
+			config.setProperty("TooFar", farAway);
+			hasChanged = true;
+		}
+		if (config.getProperty("CantFind") == null) {
+			config.setProperty("CantFind", cantFind);
+			hasChanged = true;
+		}
+		if (config.getProperty("NoPerms") == null) {
+			config.setProperty("NoPerms", noPermissions);
+			hasChanged = true;
+		}
+		if (config.getProperty("ItemKill") == null) {
+			config.setProperty("ItemKill", itemKill);
+			hasChanged = true;
+		}
+		if (config.getProperty("Max_Kill_Radius") == null) {
+			config.setProperty("Max_Kill_Radius", maxKillRadius);
+			hasChanged = true;
+		}
+		if (config.getProperty("Max_Admin_Kill_Radius") == null) {
+			config.setProperty("Max_Admin_Kill_Radius", maxAdminKillRadius);
+			hasChanged = true;
+		}
+		if (hasChanged) {
+			config.setHeader("#DropClear  Configuration File, Enjoy!!");
+			console.sendMessage("[" + pdfFile.getName() + "]" + " config.yml has been updated.");
+			config.save();
+		}
+	}
 	
 	public void readConfig() {
 		Configuration config = new Configuration(new File(getDataFolder(), "config.yml"));
@@ -112,21 +163,25 @@ public class DropClear extends JavaPlugin {
 	    
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = getDescription();
-		System.out.println("[InvinciWolf]" + " version " + 
+		console.sendMessage("[InvinciWolf]" + " version " + 
 				pdfFile.getVersion() + " is disabled!");
 	}
 	   	
-	private void setupPermissions() 
-	{
-		Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
-			
-		if (DropClear.Permissions == null) {
-			if (test != null) {
-				DropClear.Permissions = ((Permissions)test).getHandler();
-				System.out.println("[InvinciWolf] Permissions found hooking in.");
-			} else {
-				System.out.println("[InvinciWolf] Permissions plugin not found, defaulting to ops.txt.");
-			}
+	private void setupPermissions() {
+		PluginDescriptionFile pdfFile = getDescription();
+		Plugin permTest = this.getServer().getPluginManager().getPlugin("Permissions");	
+		Plugin bukkitPermTest = this.getServer().getPluginManager().getPlugin("PermissionsBukkit");
+		if (bukkitPermTest != null) {
+			bukkitPermission = true;
+			console.sendMessage("[" + (pdfFile.getName()) + "]" + " PermissionsBukkit " + (bukkitPermTest.getDescription().getVersion()) + " found hooking in.");
+		} else if (permissions == null) {
+			if (permTest != null) {
+				permissions = ((Permissions)permTest).getHandler();
+				console.sendMessage("[" + (pdfFile.getName()) + "]" + " Permissions "  + (permTest.getDescription().getVersion()) + " found hooking in.");
+			} 
+		} else {
+			bukkitPermission = true;
+			console.sendMessage("[" + (pdfFile.getName()) + "]" + " Permissions plugin not found, Defaulting to Bukkit Methods.");
 		}
 	}
 }
