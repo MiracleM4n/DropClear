@@ -12,10 +12,4 @@ commands:
             Example: /<command> - See this info.
             Example: /<command> drop 30 - Clear drops in a radius of 30.
             Example: /<command> mob 10 - Clear mobs in a radius of 10.
-    dc:
-        description: Destroy all nearby drops/mobs.
-        usage: |
-            /<command> [radius]
-            Example: /<command> - See this info.
-            Example: /<command> drop 30 - Clear drops in a radius of 30.
-            Example: /<command> mob 10 - Clear mobs in a radius of 10.
+        aliases: [dc, dclear]
