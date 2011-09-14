@@ -1,6 +1,8 @@
 package net.D3GN.MiracleM4n.DropClear;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
 import org.bukkit.craftbukkit.CraftServer;
@@ -19,7 +21,7 @@ public class DropClear extends JavaPlugin {
 	DCCommandExecutor cExecutor = null;
     DCConfigListener cListener = null;
 
-	ColouredConsoleSender console = null;
+	Logger console = null;
     Configuration config = null;
 	
 	//Strings
@@ -38,11 +40,9 @@ public class DropClear extends JavaPlugin {
 	//Booleans
 	 Boolean messageFix = true;
 	 Boolean messFix = true;
-  	 Boolean bukkitPermission = false;
 	
 	// Permissions
     public PermissionHandler permissions;
-    Boolean permissions3;
     Boolean permissionsB = false;
 
     // GroupManager
@@ -51,7 +51,7 @@ public class DropClear extends JavaPlugin {
 	
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = getDescription();
-		console = new ColouredConsoleSender((CraftServer)getServer());
+		console = getServer().getLogger();
         config = new Configuration(new File(getDataFolder(), "config.yml"));
 
         setupPermissions();
@@ -64,13 +64,13 @@ public class DropClear extends JavaPlugin {
 
         getCommand("dropclear").setExecutor(cExecutor);
 		
-		console.sendMessage("[" + (pdfFile.getName()) + "]" + " version " + 
+		console.log(Level.INFO, "[" + (pdfFile.getName()) + "]" + " version " +
 			pdfFile.getVersion() + " is enabled!");
 	}
 	    
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = getDescription();
-		console.sendMessage("[InvinciWolf]" + " version " + 
+		console.log(Level.INFO, "[InvinciWolf]" + " version " +
 				pdfFile.getVersion() + " is disabled!");
 	}
 	   	

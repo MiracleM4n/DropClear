@@ -3,7 +3,7 @@ package net.D3GN.MiracleM4n.DropClear;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.config.Configuration;
 
-import java.io.File;
+import java.util.logging.Level;
 
 public class DCConfigListener {
     DropClear plugin;
@@ -53,13 +53,13 @@ public class DCConfigListener {
 		}
 		if (hasChanged) {
 			config.setHeader("#DropClear  Configuration File, Enjoy!!");
-			plugin.console.sendMessage("[" + pdfFile.getName() + "]" + " config.yml has been updated.");
+			plugin.console.log(Level.INFO, "[" + pdfFile.getName() + "]" + " config.yml has been updated.");
 			config.save();
 		}
 	}
 
 	public void readConfig() {
-		Configuration config = new Configuration(new File(plugin.getDataFolder(), "config.yml"));
+		Configuration config = plugin.config;
 		config.load();
 
 		//Strings
