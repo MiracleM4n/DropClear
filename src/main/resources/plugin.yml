@@ -1,6 +1,6 @@
 name: DropClear
 main: net.D3GN.MiracleM4n.DropClear.DropClear
-version: 1.7.6_1
+version: 1.8.1
 website: 
 author: MiracleM4n
 description: Provides Clearing drops/mobs in a radius.

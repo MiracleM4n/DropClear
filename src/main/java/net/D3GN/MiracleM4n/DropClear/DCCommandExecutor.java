@@ -1,6 +1,5 @@
 package net.D3GN.MiracleM4n.DropClear;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -12,8 +11,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
-
-import java.util.logging.Level;
 
 public class DCCommandExecutor implements CommandExecutor {
 	DropClear plugin;
@@ -198,7 +195,7 @@ public class DCCommandExecutor implements CommandExecutor {
     				entityVar = args[1];
     				world = plugin.getServer().getWorld(args[0]);
     				if (world == null) {
-    					plugin.console.log(Level.INFO, ChatColor.RED + (plugin.pInfo) + " World " + args[0] + " not found.");
+    					plugin.log(ChatColor.RED + (plugin.pInfo) + " World " + args[0] + " not found.");
     					return true;
     				} else if (entityVar.compareToIgnoreCase("mob") == 0) {
     					plugin.messageFix = false;
@@ -215,12 +212,12 @@ public class DCCommandExecutor implements CommandExecutor {
 							}
 						}
     					if (plugin.messageFix) {
-    						plugin.console.log(Level.INFO, ChatColor.RED + (plugin.pInfo) + entityVal + " " + (plugin.itemKill) + ".");
+    						plugin.log(ChatColor.RED + (plugin.pInfo) + entityVal + " " + (plugin.itemKill) + ".");
     						plugin.messFix = false;
     						return true;
     					}
     					if (plugin.messFix) {
-    						plugin.console.log(Level.INFO, ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
+    						plugin.log(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
     						return true;
     					}
     					return false;
@@ -240,18 +237,18 @@ public class DCCommandExecutor implements CommandExecutor {
 							}
 						}
 						if (plugin.messageFix) {
-							plugin.console.log(Level.INFO, ChatColor.RED + (plugin.pInfo) + dropVal + " " + (plugin.itemKill) + ".");
+							plugin.log(ChatColor.RED + (plugin.pInfo) + dropVal + " " + (plugin.itemKill) + ".");
 							plugin.messFix = false;
 							return true;
 						}
     					if (plugin.messFix) {
-    						plugin.console.log(Level.INFO, ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
+    						plugin.log(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
     						return true;
     					}
     					return false;
     				}
     			} else {
-    				plugin.console.log(Level.INFO, ChatColor.RED + (plugin.pInfo) + " To use DropClear from console use /dropclear *WORLD* *MOB/DROP*");
+    				plugin.log(ChatColor.RED + (plugin.pInfo) + " To use DropClear from console use /dropclear *WORLD* *MOB/DROP*");
     				return true;
     			}
     		}
