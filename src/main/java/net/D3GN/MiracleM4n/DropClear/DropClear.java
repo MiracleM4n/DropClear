@@ -123,7 +123,7 @@ public class DropClear extends JavaPlugin {
             log("[" + pdfFile.getName() + "] GroupManager " + (permTest.getDescription().getVersion()) + " found hooking in.");
         } else {
             gmPermissionsB = false;
-            log("[" + pdfFile.getName() + "] No Permissions plugins were found defaulting to permissions.yml/info.yml");
+            log("[" + pdfFile.getName() + "] No Legacy Permissions plugins were found defaulting to SuperPerms.");
         }
     }
 
