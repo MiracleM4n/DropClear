@@ -23,30 +23,30 @@ public class DropClear extends JavaPlugin {
     PluginDescriptionFile pdfFile;
 
     // Listeners
-	DCCommandExecutor cExecutor = null;
+    DCCommandExecutor cExecutor = null;
     DCConfigListener cListener = null;
 
     // Configuration
     YamlConfiguration dConfig = null;
     File dConfigF = null;
-	
-	// Strings
+
+    // Strings
     String notNumber = "That is not a number";
-	String negativeInterger = "Cant Use Negative Values";
-	String farAway = "Too far away";
-	String cantFind = "No Items Found";
-	String noPermissions = "You don't have permissions to use this";
-	String itemKill = "Items Cleared";
-	String pInfo = "[DropClear] ";
-	
-	// Integers
-	Integer maxKillRadius = 10;
-	Integer maxAdminKillRadius = 30;
-	
-	// Booleans
-	Boolean messageFix = true;
-	Boolean messFix = true;
-	
+    String negativeInterger = "Cant Use Negative Values";
+    String farAway = "Too far away";
+    String cantFind = "No Items Found";
+    String noPermissions = "You don't have permissions to use this";
+    String itemKill = "Items Cleared";
+    String pInfo = "[DropClear] ";
+
+    // Integers
+    Integer maxKillRadius = 10;
+    Integer maxAdminKillRadius = 30;
+
+    // Booleans
+    Boolean messageFix = true;
+    Boolean messFix = true;
+
     // Permissions
     public PermissionHandler permissions;
     Boolean permissions3;
@@ -60,8 +60,8 @@ public class DropClear extends JavaPlugin {
     public PermissionManager pexPermissions;
     Boolean PEXB = false;
 
-	public void onEnable() {
-		pm = getServer().getPluginManager();
+    public void onEnable() {
+        pm = getServer().getPluginManager();
         pdfFile = getDescription();
 
         dConfigF = new File(getDataFolder(), "config.yml");
@@ -69,24 +69,24 @@ public class DropClear extends JavaPlugin {
 
         setupPEX();
 
-	    cExecutor = new DCCommandExecutor(this);
+        cExecutor = new DCCommandExecutor(this);
         cListener = new DCConfigListener(this);
 
         cListener.checkConfig();
         cListener.loadConfig();
 
         getCommand("dropclear").setExecutor(cExecutor);
-		
-		log("[" + (pdfFile.getName()) + "]" + " version " +
-			pdfFile.getVersion() + " is enabled!");
-	}
-	    
-	public void onDisable() {
-		PluginDescriptionFile pdfFile = getDescription();
-		log("[InvinciWolf]" + " version " +
-				pdfFile.getVersion() + " is disabled!");
-	}
-	   	
+
+        log("[" + (pdfFile.getName()) + "]" + " version " +
+            pdfFile.getVersion() + " is enabled!");
+    }
+
+    public void onDisable() {
+        PluginDescriptionFile pdfFile = getDescription();
+        log("[InvinciWolf]" + " version " +
+                pdfFile.getVersion() + " is disabled!");
+    }
+
     protected void setupPEX() {
         Plugin pexTest = pm.getPlugin("PermissionsEx");
 
@@ -127,25 +127,12 @@ public class DropClear extends JavaPlugin {
         }
     }
 
-    public void log(String loggedString) {
-        getServer().getConsoleSender().sendMessage(loggedString);
-    }
-
-    public Boolean checkPermissions(Player player, String node) {
-        if (permissionsB)
-            if (permissions.has(player, node))
-                return true;
-
-        if (gmPermissionsB)
-            if (gmPermissions.has(player, node))
-                return true;
-
-        if (PEXB)
-            if (pexPermissions.has(player, node))
-                return true;
-
-        return player.hasPermission(node) || player.isOp();
-
+    public void log(Object loggedObject) {
+        try {
+           getServer().getConsoleSender().sendMessage(loggedObject.toString());
+        } catch (IncompatibleClassChangeError ignored) {
+            System.out.println(loggedObject);
+        }
     }
 
     @SuppressWarnings("unused")
