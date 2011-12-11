@@ -1,4 +1,4 @@
-package net.D3GN.MiracleM4n.DropClear;
+package in.mDev.MiracleM4n.DropClear;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
