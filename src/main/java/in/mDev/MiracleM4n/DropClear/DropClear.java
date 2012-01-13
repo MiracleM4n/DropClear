@@ -12,12 +12,6 @@ import org.bukkit.plugin.Plugin;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
-import org.anjocaido.groupmanager.permissions.AnjoPermissionsHandler;
-
-import ru.tehkode.permissions.PermissionManager;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
-
-
 public class DropClear extends JavaPlugin {
     PluginManager pm;
     PluginDescriptionFile pdfFile;
@@ -49,16 +43,7 @@ public class DropClear extends JavaPlugin {
 
     // Permissions
     public PermissionHandler permissions;
-    Boolean permissions3;
     Boolean permissionsB = false;
-
-    // GroupManager
-    public AnjoPermissionsHandler gmPermissions;
-    Boolean gmPermissionsB = false;
-
-    // PermissionsEX
-    public PermissionManager pexPermissions;
-    Boolean PEXB = false;
 
     public void onEnable() {
         pm = getServer().getPluginManager();
@@ -67,7 +52,7 @@ public class DropClear extends JavaPlugin {
         dConfigF = new File(getDataFolder(), "config.yml");
         dConfig = YamlConfiguration.loadConfiguration(dConfigF);
 
-        setupPEX();
+        setupPermissions();
 
         cExecutor = new DCCommandExecutor(this);
         cListener = new DCConfigListener(this);
@@ -83,21 +68,8 @@ public class DropClear extends JavaPlugin {
 
     public void onDisable() {
         PluginDescriptionFile pdfFile = getDescription();
-        log("[InvinciWolf]" + " version " +
+        log("[" + (pdfFile.getName()) + "]" + " version " +
                 pdfFile.getVersion() + " is disabled!");
-    }
-
-    protected void setupPEX() {
-        Plugin pexTest = pm.getPlugin("PermissionsEx");
-
-        if (pexTest != null) {
-            pexPermissions = PermissionsEx.getPermissionManager();
-            PEXB = true;
-            log("[" + pdfFile.getName() + "] PermissionsEx " + (pexTest.getDescription().getVersion()) + " found hooking in.");
-        } else {
-            PEXB = false;
-            setupPermissions();
-        }
     }
 
     protected void setupPermissions() {
@@ -106,24 +78,9 @@ public class DropClear extends JavaPlugin {
         if(permTest != null) {
             permissions = ((Permissions) permTest).getHandler();
             permissionsB = true;
-            permissions3 = permTest.getDescription().getVersion().startsWith("3");
             log("[" + pdfFile.getName() + "] Permissions " + (permTest.getDescription().getVersion()) + " found hooking in.");
         } else {
             permissionsB = false;
-            permissions3 = false;
-            setupGroupManager();
-        }
-    }
-
-    protected void setupGroupManager() {
-        Plugin permTest = pm.getPlugin("GroupManager");
-
-        if (permTest != null) {
-            gmPermissionsB = true;
-            log("[" + pdfFile.getName() + "] GroupManager " + (permTest.getDescription().getVersion()) + " found hooking in.");
-        } else {
-            gmPermissionsB = false;
-            log("[" + pdfFile.getName() + "] No Legacy Permissions plugins were found defaulting to SuperPerms.");
         }
     }
 
@@ -139,14 +96,6 @@ public class DropClear extends JavaPlugin {
     public Boolean checkPermissions(Player player, String node, Boolean useOp) {
         if (permissionsB)
             if (permissions.has(player, node))
-                return true;
-
-        if (gmPermissionsB)
-            if (gmPermissions.has(player, node))
-                return true;
-
-        if (PEXB)
-            if (pexPermissions.has(player, node))
                 return true;
 
         if (useOp)
