@@ -5,13 +5,13 @@
     <name>DropClear</name>
     <url>http://mDev.in/</url>
     <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <api.version>unknown</api.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <api.version>unknown</api.version>
     </properties>
     <repositories>
         <repository>
             <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/artifactory/repo</url>
+            <url>http://repo.bukkit.org/content/groups/public</url>
             <releases>
                 <updatePolicy>always</updatePolicy>
             </releases>
@@ -57,14 +57,14 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.0.1-R1</version>
+            <version>1.1-R1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.nijiko</groupId>
-            <artifactId>Permissions</artifactId>
-            <version>3.1.6</version>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.1-R1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
