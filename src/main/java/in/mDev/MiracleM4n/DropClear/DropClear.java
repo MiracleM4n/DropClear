@@ -50,6 +50,8 @@ public class DropClear extends JavaPlugin {
         cListener.checkConfig();
         cListener.loadConfig();
 
+        pm.registerEvents(new DCCPlayerListener(this), this);
+
         getCommand("dropclear").setExecutor(cExecutor);
 
         log("[" + (pdfFile.getName()) + "]" + " version " +

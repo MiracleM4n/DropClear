@@ -20,14 +20,25 @@ public class DCConfigListener {
         YamlConfiguration config = plugin.dConfig;
         YamlConfigurationOptions configO = config.options();
 
-        checkOption(config, "NotNumb", plugin.notNumber);
-        checkOption(config, "NegValue", plugin.negativeInterger);
-        checkOption(config, "TooFar", plugin.farAway);
-        checkOption(config, "CantFind", plugin.cantFind);
-        checkOption(config, "NoPerms", plugin.noPermissions);
-        checkOption(config, "ItemKill", plugin.itemKill);
-        checkOption(config, "Max_Kill_Radius", plugin.maxKillRadius);
-        checkOption(config, "Max_Admin_Kill_Radius", plugin.maxAdminKillRadius);
+        editOption(config, "NotNumb", "message.notNumber");
+        editOption(config, "NegValue", "message.negativeValue");
+        editOption(config, "TooFar", "message.tooFar");
+        editOption(config, "CantFind", "message.cantFind");
+        editOption(config, "NoPerms", "message.noPerm");
+        editOption(config, "ItemKill", "message.itemCleared");
+
+        editOption(config, "Max_Kill_Radius", "int.maxKill");
+        editOption(config, "Max_Admin_Kill_Radius", "int.maxAdminKill");
+
+        checkOption(config, "message.notNumber", plugin.notNumber);
+        checkOption(config, "message.negativeValue", plugin.negativeInterger);
+        checkOption(config, "message.tooFar", plugin.farAway);
+        checkOption(config, "message.cantFind", plugin.cantFind);
+        checkOption(config, "message.noPerm", plugin.noPermissions);
+        checkOption(config, "message.itemCleared", plugin.itemKill);
+
+        checkOption(config, "int.maxKill", plugin.maxKillRadius);
+        checkOption(config, "int.maxAdminKill", plugin.maxAdminKillRadius);
 
         if (hasChanged) {
             configO.header("DropClear  Configuration File, Enjoy!!");
@@ -44,21 +55,29 @@ public class DCConfigListener {
         YamlConfiguration config = plugin.dConfig;
 
         //Strings
-        plugin.notNumber  = config.getString("NotNumb", plugin.notNumber);
-        plugin.negativeInterger  = config.getString("NegValue", plugin.negativeInterger);
-        plugin.farAway  = config.getString("TooFar", plugin.farAway);
-        plugin.cantFind  = config.getString("CantFind", plugin.cantFind);
-        plugin.noPermissions  = config.getString("NoPerms", plugin.noPermissions);
-        plugin.itemKill  = config.getString("ItemKill", plugin.itemKill);
+        plugin.notNumber  = config.getString("message.notNumber", plugin.notNumber);
+        plugin.negativeInterger  = config.getString("message.negativeValue", plugin.negativeInterger);
+        plugin.farAway  = config.getString("message.tooFar", plugin.farAway);
+        plugin.cantFind  = config.getString("message.cantFind", plugin.cantFind);
+        plugin.noPermissions  = config.getString("message.noPerm", plugin.noPermissions);
+        plugin.itemKill  = config.getString("message.itemCleared", plugin.itemKill);
 
         //Intergers
-        plugin.maxKillRadius = config.getInt("Max_Kill_Radius", plugin.maxKillRadius);
-        plugin.maxAdminKillRadius = config.getInt("Max_Admin_Kill_Radius", plugin.maxAdminKillRadius);
+        plugin.maxKillRadius = config.getInt("int.maxKill", plugin.maxKillRadius);
+        plugin.maxAdminKillRadius = config.getInt("int.maxAdminKill", plugin.maxAdminKillRadius);
     }
 
     void checkOption(YamlConfiguration config, String option, Object defValue) {
         if (!config.isSet(option)) {
             config.set(option, defValue);
+            hasChanged = true;
+        }
+    }
+
+    void editOption(YamlConfiguration config, String oldOption, String newOption) {
+        if (config.isSet(oldOption)) {
+            config.set(newOption, config.get(oldOption));
+            config.set(oldOption, null);
             hasChanged = true;
         }
     }
