@@ -23,8 +23,10 @@ public class DCCommandExecutor implements CommandExecutor {
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String commandName = command.getName();
+
         if (sender instanceof Player) {
             Player player = ((Player) sender);
+
             if (commandName.equalsIgnoreCase("dropclear")) {
                 if(args.length == 2) {
                     Integer entityVal = 0;
@@ -32,75 +34,81 @@ public class DCCommandExecutor implements CommandExecutor {
                     String entityVar;
                     Integer radius;
                     entityVar = args[0];
+
                     try {
                         radius = new Integer(args[1]);
                     } catch (NumberFormatException e) {
                         player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.notNumber) + ".");
                       return true;
                     }
+
                     if (entityVar.equalsIgnoreCase("mob")) {
                         if (plugin.checkPermissions(player, "dropclear.killadmin", false)) {
                             if (radius < noTeleportRadius) {
+
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.negativeInterger) + ".");
                                     return true;
                                 }
-                                if(radius <= plugin.maxAdminKillRadius) {
-                                    plugin.messageFix = false;
-                                    plugin.messFix = true;
-                                    for(Entity entity : (player.getNearbyEntities(radius,radius,radius))) {
-                                        if (!(entity instanceof Player)) {
-                                            if (!(entity instanceof Wolf)) {
-                                                if (entity instanceof LivingEntity) {
-                                                    entityVal++;
-                                                    entity.remove();
-                                                    plugin.messageFix = true;
-                                                }
-                                            }
-                                        }
-                                        }
-                                    if (plugin.messageFix) {
-                                        player.sendMessage(ChatColor.RED + (plugin.pInfo) + entityVal + " " + (plugin.itemKill) + ".");
-                                        plugin.messFix = false;
-                                        return true;
-                                    }
-                                    if (plugin.messFix) {
-                                        player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
-                                        return true;
-                                    }
-                                }
-                                if(radius > plugin.maxAdminKillRadius) {
-                                    player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.farAway) + ".");
-                                    return true;
-                                }
-                        } else if (plugin.checkPermissions(player, "dropclear.kill", false)) {
-                            if (radius < noTeleportRadius) {
-                                player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.negativeInterger) + ".");
-                                return true;
-                            }
-                               if(radius <= plugin.maxKillRadius) {
+
+                            if(radius <= plugin.maxAdminKillRadius) {
                                 plugin.messageFix = false;
                                 plugin.messFix = true;
-                                for(Entity entity : (player.getNearbyEntities(radius,radius,radius))) {
-                                    if (!(entity instanceof Player)) {
-                                        if (!(entity instanceof Wolf)) {
+
+                                for(Entity entity : (player.getNearbyEntities(radius,radius,radius)))
+                                    if (!(entity instanceof Player))
+                                        if (!(entity instanceof Wolf))
                                             if (entity instanceof LivingEntity) {
                                                 entityVal++;
                                                 entity.remove();
                                                 plugin.messageFix = true;
                                             }
-                                        }
-                                    }
-                                }
+
                                 if (plugin.messageFix) {
                                     player.sendMessage(ChatColor.RED + (plugin.pInfo) + entityVal + " " + (plugin.itemKill) + ".");
                                     plugin.messFix = false;
                                     return true;
                                 }
+
                                 if (plugin.messFix) {
                                     player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
                                     return true;
                                 }
                             }
+
+                            else if (radius > plugin.maxAdminKillRadius) {
+                                player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.farAway) + ".");
+                                return true;
+                            }
+                        } else if (plugin.checkPermissions(player, "dropclear.kill", false)) {
+                            if (radius < noTeleportRadius) {
+                                player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.negativeInterger) + ".");
+                                return true;
+                            }
+                            if(radius <= plugin.maxKillRadius) {
+                                plugin.messageFix = false;
+                                plugin.messFix = true;
+
+                                for(Entity entity : (player.getNearbyEntities(radius,radius,radius)))
+                                    if (!(entity instanceof Player))
+                                        if (!(entity instanceof Wolf))
+                                            if (entity instanceof LivingEntity) {
+                                                entityVal++;
+                                                entity.remove();
+                                                plugin.messageFix = true;
+                                            }
+
+                                if (plugin.messageFix) {
+                                    player.sendMessage(ChatColor.RED + (plugin.pInfo) + entityVal + " " + (plugin.itemKill) + ".");
+                                    plugin.messFix = false;
+                                    return true;
+                                }
+
+                                if (plugin.messFix) {
+                                    player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
+                                    return true;
+                                }
+                            }
+
                             if(radius > plugin.maxKillRadius) {
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.farAway) + ".");
                                 return true;
@@ -115,27 +123,32 @@ public class DCCommandExecutor implements CommandExecutor {
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.negativeInterger) + ".");
                                 return true;
                             }
+
                             if(radius <= plugin.maxAdminKillRadius) {
                                 plugin.messageFix = false;
                                 plugin.messFix = true;
+
                                 for(Entity entity : (player.getNearbyEntities(radius,radius,radius))) {
                                     if (entity instanceof Item) {
                                         dropVal++;
                                         entity.remove();
                                            plugin.messageFix = true;
                                     }
+
                                     if (entity instanceof CraftItem) {
                                         dropVal++;
                                         entity.remove();
                                         plugin.messageFix = true;
                                     }
                                 }
+
                                 if (plugin.messageFix) {
                                     player.sendMessage(ChatColor.RED + (plugin.pInfo) + dropVal + " " + (plugin.itemKill) + ".");
                                     plugin.messFix = false;
                                     return true;
                                 }
-                                   if (plugin.messFix) {
+
+                                if (plugin.messFix) {
                                     player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
                                     return true;
                                 }
@@ -144,7 +157,7 @@ public class DCCommandExecutor implements CommandExecutor {
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.farAway) + ".");
                                 return true;
                             }
-                           } else if (plugin.checkPermissions(player, "dropclear.kill", false)) {
+                        } else if (plugin.checkPermissions(player, "dropclear.kill", false)) {
                             if (radius < noTeleportRadius) {
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.negativeInterger) + ".");
                                 return true;
@@ -152,33 +165,37 @@ public class DCCommandExecutor implements CommandExecutor {
                             if(radius <= plugin.maxKillRadius) {
                                 plugin.messageFix = false;
                                 plugin.messFix = true;
+
                                 for(Entity entity : (player.getNearbyEntities(radius,radius,radius))) {
                                     if (entity instanceof Item) {
                                         dropVal++;
-                                           entity.remove();
+                                        entity.remove();
                                         plugin.messageFix = true;
                                     }
+
                                     if (entity instanceof CraftItem) {
                                         dropVal++;
                                         entity.remove();
-                                           plugin.messageFix = true;
+                                        plugin.messageFix = true;
                                     }
                                 }
+
                                 if (plugin.messageFix) {
-                                       player.sendMessage(ChatColor.RED + (plugin.pInfo) + dropVal + " " + (plugin.itemKill) + ".");
+                                    player.sendMessage(ChatColor.RED + (plugin.pInfo) + dropVal + " " + (plugin.itemKill) + ".");
                                     plugin.messFix = false;
                                     return true;
                                 }
-                                   if (plugin.messFix) {
+
+                                if (plugin.messFix) {
                                     player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
                                     return true;
                                 }
                             }
-                               if(radius > plugin.maxKillRadius) {
+                            if(radius > plugin.maxKillRadius) {
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.farAway) + ".");
                                 return true;
                             }
-                           } else {
+                        } else {
                             player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.noPermissions) + ".");
                             return true;
                         }
@@ -194,53 +211,59 @@ public class DCCommandExecutor implements CommandExecutor {
                     World world;
                     entityVar = args[1];
                     world = plugin.getServer().getWorld(args[0]);
+
                     if (world == null) {
                         plugin.log(ChatColor.RED + (plugin.pInfo) + " World " + args[0] + " not found.");
                         return true;
                     } else if (entityVar.compareToIgnoreCase("mob") == 0) {
                         plugin.messageFix = false;
                         plugin.messFix = true;
-                        for(Entity entity : (world.getEntities())) {
-                            if (!(entity instanceof Player)) {
-                                if (!(entity instanceof Wolf)) {
+
+                        for(Entity entity : (world.getEntities()))
+                            if (!(entity instanceof Player))
+                                if (!(entity instanceof Wolf))
                                     if (entity instanceof LivingEntity) {
                                         entityVal++;
                                         entity.remove();
                                         plugin.messageFix = true;
                                     }
-                                }
-                            }
-                        }
+
                         if (plugin.messageFix) {
                             plugin.log(ChatColor.RED + (plugin.pInfo) + entityVal + " " + (plugin.itemKill) + ".");
                             plugin.messFix = false;
                             return true;
                         }
+
                         if (plugin.messFix) {
                             plugin.log(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
                             return true;
                         }
+
                         return false;
                     } else if (entityVar.equalsIgnoreCase("drop")) {
                         plugin.messageFix = false;
                         plugin.messFix = true;
+
                         for(Entity entity : (world.getEntities())) {
                             if (entity instanceof Item) {
                                 dropVal++;
                                 entity.remove();
                                 plugin.messageFix = true;
                             }
+
                             if (entity instanceof CraftItem) {
                                 dropVal++;
                                 entity.remove();
                                 plugin.messageFix = true;
                             }
                         }
+
                         if (plugin.messageFix) {
                             plugin.log(ChatColor.RED + (plugin.pInfo) + dropVal + " " + (plugin.itemKill) + ".");
                             plugin.messFix = false;
                             return true;
                         }
+
                         if (plugin.messFix) {
                             plugin.log(ChatColor.RED + (plugin.pInfo) + (plugin.cantFind) + ".");
                             return true;
