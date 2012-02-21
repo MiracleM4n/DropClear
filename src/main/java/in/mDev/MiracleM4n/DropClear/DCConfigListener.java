@@ -20,38 +20,15 @@ public class DCConfigListener {
         YamlConfiguration config = plugin.dConfig;
         YamlConfigurationOptions configO = config.options();
 
-        if (config.get("NotNumb") == null) {
-            config.set("NotNumb", plugin.notNumber);
-            hasChanged = true;
-        }
-        if (config.get("NegValue") == null) {
-            config.set("NegValue", plugin.negativeInterger);
-            hasChanged = true;
-        }
-        if (config.get("TooFar") == null) {
-            config.set("TooFar", plugin.farAway);
-            hasChanged = true;
-        }
-        if (config.get("CantFind") == null) {
-            config.set("CantFind", plugin.cantFind);
-            hasChanged = true;
-        }
-        if (config.get("NoPerms") == null) {
-            config.set("NoPerms", plugin.noPermissions);
-            hasChanged = true;
-        }
-        if (config.get("ItemKill") == null) {
-            config.set("ItemKill", plugin.itemKill);
-            hasChanged = true;
-        }
-        if (config.get("Max_Kill_Radius") == null) {
-            config.set("Max_Kill_Radius", plugin.maxKillRadius);
-            hasChanged = true;
-        }
-        if (config.get("Max_Admin_Kill_Radius") == null) {
-            config.set("Max_Admin_Kill_Radius", plugin.maxAdminKillRadius);
-            hasChanged = true;
-        }
+        checkOption(config, "NotNumb", plugin.notNumber);
+        checkOption(config, "NegValue", plugin.negativeInterger);
+        checkOption(config, "TooFar", plugin.farAway);
+        checkOption(config, "CantFind", plugin.cantFind);
+        checkOption(config, "NoPerms", plugin.noPermissions);
+        checkOption(config, "ItemKill", plugin.itemKill);
+        checkOption(config, "Max_Kill_Radius", plugin.maxKillRadius);
+        checkOption(config, "Max_Admin_Kill_Radius", plugin.maxAdminKillRadius);
+
         if (hasChanged) {
             configO.header("DropClear  Configuration File, Enjoy!!");
 
@@ -77,5 +54,12 @@ public class DCConfigListener {
         //Intergers
         plugin.maxKillRadius = config.getInt("Max_Kill_Radius", plugin.maxKillRadius);
         plugin.maxAdminKillRadius = config.getInt("Max_Admin_Kill_Radius", plugin.maxAdminKillRadius);
+    }
+
+    void checkOption(YamlConfiguration config, String option, Object defValue) {
+        if (!config.isSet(option)) {
+            config.set(option, defValue);
+            hasChanged = true;
+        }
     }
 }
