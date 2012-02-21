@@ -1,8 +1,14 @@
 package in.mDev.MiracleM4n.DropClear;
 
 import java.io.File;
+import java.util.Map;
 
+import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,13 +18,11 @@ public class DropClear extends JavaPlugin {
     PluginManager pm;
     PluginDescriptionFile pdfFile;
 
-    // Listeners
-    DCCommandExecutor cExecutor = null;
-    DCConfigListener cListener = null;
-
     // Configuration
     YamlConfiguration dConfig = null;
+    YamlConfiguration tConfig = null;
     File dConfigF = null;
+    File tConfigF = null;
 
     // Strings
     String notNumber = "That is not a number";
@@ -42,17 +46,22 @@ public class DropClear extends JavaPlugin {
         pdfFile = getDescription();
 
         dConfigF = new File(getDataFolder(), "config.yml");
+        tConfigF = new File(getDataFolder(), "tasks.yml");
+
         dConfig = YamlConfiguration.loadConfiguration(dConfigF);
+        tConfig = YamlConfiguration.loadConfiguration(tConfigF);
 
-        cExecutor = new DCCommandExecutor(this);
-        cListener = new DCConfigListener(this);
+        new DCConfigListener(this).checkConfig();
+        new DCConfigListener(this).loadConfig();
 
-        cListener.checkConfig();
-        cListener.loadConfig();
+        new DCTConfigListener(this).checkConfig();
+        new DCTConfigListener(this).loadConfig();
 
-        pm.registerEvents(new DCCPlayerListener(this), this);
+        pm.registerEvents(new DCCreatureListener(this), this);
 
-        getCommand("dropclear").setExecutor(cExecutor);
+        getCommand("dropclear").setExecutor(new DCCommandExecutor(this));
+
+        startTasks();
 
         log("[" + (pdfFile.getName()) + "]" + " version " +
             pdfFile.getVersion() + " is enabled!");
@@ -66,6 +75,52 @@ public class DropClear extends JavaPlugin {
 
     public void log(Object loggedObject) {
         System.out.println(loggedObject);
+    }
+
+    void startTasks() {
+        new DCTConfigListener(this).loadConfig();
+
+        getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+            public void run() {
+                for (Map.Entry<String, Object> set : tConfig.getValues(true).entrySet()) {
+                    World world = getServer().getWorld(set.getValue().toString());
+
+                    if (world == null)
+                        continue;
+
+                    String value = set.getKey();
+
+                    Integer x;
+                    Integer y;
+                    Integer z;
+
+                    try {
+                        x = Integer.valueOf(value.split("\\|")[0]);
+                        y = Integer.valueOf(value.split("\\|")[1]);
+                        z = Integer.valueOf(value.split("\\|")[2]);
+                    } catch (Exception ignored) {
+                        continue;
+                    }
+
+                    Block block = world.getBlockAt(x,y,z);
+
+                    if (block == null)
+                        continue;
+
+                    Chunk chunk = block.getChunk();
+                    
+                    for (Entity entity : chunk.getEntities()) {
+                        if (entity instanceof Player)
+                            continue;
+
+                        if (entity instanceof Wolf)
+                            continue;
+
+                        entity.remove();
+                    }
+                }
+            }
+        }, 10*20L, 10*20L);
     }
 
     @SuppressWarnings("unused")
