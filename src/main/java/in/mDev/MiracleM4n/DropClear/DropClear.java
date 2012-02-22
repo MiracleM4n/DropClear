@@ -78,10 +78,10 @@ public class DropClear extends JavaPlugin {
     }
 
     void startTasks() {
-        new DCTConfigListener(this).loadConfig();
-
         getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
             public void run() {
+                new DCTConfigListener((DropClear) pm.getPlugin("DropClear")).loadConfig();
+
                 for (Map.Entry<String, Object> set : tConfig.getValues(true).entrySet()) {
                     World world = getServer().getWorld(set.getValue().toString());
 
