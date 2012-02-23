@@ -84,6 +84,7 @@ public class DCCommandExecutor implements CommandExecutor {
                                 player.sendMessage(ChatColor.RED + (plugin.pInfo) + (plugin.negativeInterger) + ".");
                                 return true;
                             }
+
                             if(radius <= plugin.maxKillRadius) {
                                 plugin.messageFix = false;
                                 plugin.messFix = true;
@@ -132,7 +133,7 @@ public class DCCommandExecutor implements CommandExecutor {
                                     if (entity instanceof Item) {
                                         dropVal++;
                                         entity.remove();
-                                           plugin.messageFix = true;
+                                        plugin.messageFix = true;
                                     }
 
                                     if (entity instanceof CraftItem) {

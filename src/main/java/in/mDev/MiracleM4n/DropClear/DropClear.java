@@ -63,14 +63,12 @@ public class DropClear extends JavaPlugin {
 
         startTasks();
 
-        log("[" + (pdfFile.getName()) + "]" + " version " +
-            pdfFile.getVersion() + " is enabled!");
+        log("[" + (pdfFile.getName()) + "]" + " version " + pdfFile.getVersion() + " is enabled!");
     }
 
     public void onDisable() {
         PluginDescriptionFile pdfFile = getDescription();
-        log("[" + (pdfFile.getName()) + "]" + " version " +
-                pdfFile.getVersion() + " is disabled!");
+        log("[" + (pdfFile.getName()) + "]" + " version " + pdfFile.getVersion() + " is disabled!");
     }
 
     public void log(Object loggedObject) {
@@ -123,7 +121,6 @@ public class DropClear extends JavaPlugin {
         }, 10*20L, 10*20L);
     }
 
-    @SuppressWarnings("unused")
     public Boolean checkPermissions(Player player, String node, Boolean useOp) {
         if (useOp)
             return player.isOp();
