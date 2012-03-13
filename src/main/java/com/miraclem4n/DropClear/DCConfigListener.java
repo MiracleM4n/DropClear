@@ -1,4 +1,4 @@
-package in.mDev.MiracleM4n.DropClear;
+package com.miraclem4n.dropclear;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.file.YamlConfigurationOptions;

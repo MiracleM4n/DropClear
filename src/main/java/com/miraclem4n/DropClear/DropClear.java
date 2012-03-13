@@ -1,4 +1,4 @@
-package in.mDev.MiracleM4n.DropClear;
+package com.miraclem4n.dropclear;
 
 import java.io.File;
 import java.util.Map;
@@ -78,7 +78,7 @@ public class DropClear extends JavaPlugin {
     void startTasks() {
         getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
             public void run() {
-                new DCTConfigListener((DropClear) pm.getPlugin("DropClear")).loadConfig();
+                new DCTConfigListener((DropClear) pm.getPlugin("dropclear")).loadConfig();
 
                 for (Map.Entry<String, Object> set : tConfig.getValues(true).entrySet()) {
                     World world = getServer().getWorld(set.getValue().toString());
