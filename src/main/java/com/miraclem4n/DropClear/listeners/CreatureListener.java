@@ -1,5 +1,7 @@
-package com.miraclem4n.dropclear;
+package com.miraclem4n.dropclear.listeners;
 
+import com.miraclem4n.dropclear.DropClear;
+import com.miraclem4n.dropclear.util.TasksUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -8,18 +10,18 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.Map;
 
-public class DCCreatureListener implements Listener {
+public class CreatureListener implements Listener {
     DropClear plugin;
 
-    public DCCreatureListener(DropClear plugin) {
-        this.plugin = plugin;
+    public CreatureListener(DropClear instance) {
+        plugin = instance;
     }
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        new DCTConfigListener(plugin).loadConfig();
+        TasksUtil.load();
 
-        for (Map.Entry<String, Object> set : plugin.tConfig.getValues(true).entrySet()) {
+        for (Map.Entry<String, Object> set : TasksUtil.getConfig().getValues(true).entrySet()) {
             World world = plugin.getServer().getWorld(set.getValue().toString());
 
             if (world == null)
